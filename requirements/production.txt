@@ -1,0 +1,7 @@
+# Production-specific requirements
+-r base.txt
+
+gunicorn==23.0.0
+
+django-storages==1.14.6
+boto3==1.39.1
