@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/mosaic.css' %}">
+{% endblock %}
+
+{% block body_class %}template-portfolio{% endblock %}
+
+{% block content %}
+    <div class="mosaic">
+        {{ page.tiles }}
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/mosaic.js' %}"></script>
+{% endblock %}

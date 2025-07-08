@@ -1,0 +1,7 @@
+{% load wagtailimages_tags %}
+
+<div class="tile-block">
+    {% for img in value.images %}
+        {% image img fill-400x400 loading="lazy" %}
+    {% endfor %}
+</div>
