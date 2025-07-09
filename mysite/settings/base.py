@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "tailwind",
+    "theme",
 ]
 
 MIDDLEWARE = [
@@ -226,3 +228,5 @@ LOGGING = {
         },
     },
 }
+
+TAILWIND_APP_NAME = 'theme'
