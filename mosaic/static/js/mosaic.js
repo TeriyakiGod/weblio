@@ -28,32 +28,38 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         let currentImageIndex = 0;
+        let lastTransitionTime = 0;
+        const transitionInterval = Math.random() * 4000 + 3000; // Random interval between 3-7 seconds
         
-        function switchImage() {
-            const currentImage = images[currentImageIndex];
-            const nextImageIndex = (currentImageIndex + 1) % images.length;
-            const nextImage = images[nextImageIndex];
+        function switchImage(currentTime) {
+            if (currentTime - lastTransitionTime >= transitionInterval) {
+                const currentImage = images[currentImageIndex];
+                const nextImageIndex = (currentImageIndex + 1) % images.length;
+                const nextImage = images[nextImageIndex];
+                
+                // Set z-index for proper layering
+                nextImage.style.zIndex = '10';
+                currentImage.style.zIndex = '1';
+                
+                // Animate based on transition type
+                animateTransition(currentImage, nextImage, transition).then(() => {
+                    // Reset the previous image after animation
+                    setInitialState(currentImage, transition);
+                });
+                
+                currentImageIndex = nextImageIndex;
+                lastTransitionTime = currentTime;
+            }
             
-            // Set z-index for proper layering
-            nextImage.style.zIndex = '10';
-            currentImage.style.zIndex = '1';
-            
-            // Animate based on transition type
-            animateTransition(currentImage, nextImage, transition).then(() => {
-                // Reset the previous image after animation
-                setInitialState(currentImage, transition);
-            });
-            
-            currentImageIndex = nextImageIndex;
-            
-            // Schedule next transition
-            const randomInterval = Math.random() * 4000 + 3000;
-            setTimeout(switchImage, randomInterval);
+            requestAnimationFrame(switchImage);
         }
         
         // Start the transitions after initial delay
         const initialDelay = Math.random() * 3000 + 1000;
-        setTimeout(switchImage, initialDelay);
+        setTimeout(() => {
+            lastTransitionTime = performance.now();
+            requestAnimationFrame(switchImage);
+        }, initialDelay);
     }
     
     function setupFlipTransition(tile, images, transition) {
@@ -67,68 +73,74 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         let currentImageIndex = 0;
+        let lastFlipTime = 0;
+        const flipInterval = Math.random() * 4000 + 3000; // Random interval between 3-7 seconds
         
-        function flipTile() {
-            const nextImageIndex = (currentImageIndex + 1) % images.length;
-            const currentImage = images[currentImageIndex];
-            const nextImage = images[nextImageIndex];
-            
-            // Get flip direction
-            const flipDirection = getFlipDirection(transition);
-            
-            // Handle diagonal flip specially
-            if (transition === 'flip-diagonal') {
-                anime.timeline()
-                    .add({
-                        targets: tile,
-                        rotateX: 90,
-                        rotateY: 90,
-                        duration: 750,
-                        easing: 'easeInOutCubic',
-                        complete: () => {
-                            currentImage.style.opacity = '0';
-                            nextImage.style.opacity = '1';
-                        }
-                    })
-                    .add({
-                        targets: tile,
-                        rotateX: 0,
-                        rotateY: 0,
-                        duration: 750,
-                        easing: 'easeInOutCubic'
-                    });
-            } else {
-                // Regular flip - simple and clean
-                anime.timeline()
-                    .add({
-                        targets: tile,
-                        [flipDirection.axis]: flipDirection.half,
-                        duration: 750,
-                        easing: 'easeInOutCubic',
-                        complete: () => {
-                            // At the halfway point, swap images
-                            currentImage.style.opacity = '0';
-                            nextImage.style.opacity = '1';
-                        }
-                    })
-                    .add({
-                        targets: tile,
-                        [flipDirection.axis]: 0,
-                        duration: 750,
-                        easing: 'easeInOutCubic'
-                    });
+        function flipTile(currentTime) {
+            if (currentTime - lastFlipTime >= flipInterval) {
+                const nextImageIndex = (currentImageIndex + 1) % images.length;
+                const currentImage = images[currentImageIndex];
+                const nextImage = images[nextImageIndex];
+                
+                // Get flip direction
+                const flipDirection = getFlipDirection(transition);
+                
+                // Handle diagonal flip specially
+                if (transition === 'flip-diagonal') {
+                    anime.timeline()
+                        .add({
+                            targets: tile,
+                            rotateX: 90,
+                            rotateY: 90,
+                            duration: 750,
+                            easing: 'easeInOutCubic',
+                            complete: () => {
+                                currentImage.style.opacity = '0';
+                                nextImage.style.opacity = '1';
+                            }
+                        })
+                        .add({
+                            targets: tile,
+                            rotateX: 0,
+                            rotateY: 0,
+                            duration: 750,
+                            easing: 'easeInOutCubic'
+                        });
+                } else {
+                    // Regular flip - simple and clean
+                    anime.timeline()
+                        .add({
+                            targets: tile,
+                            [flipDirection.axis]: flipDirection.half,
+                            duration: 750,
+                            easing: 'easeInOutCubic',
+                            complete: () => {
+                                // At the halfway point, swap images
+                                currentImage.style.opacity = '0';
+                                nextImage.style.opacity = '1';
+                            }
+                        })
+                        .add({
+                            targets: tile,
+                            [flipDirection.axis]: 0,
+                            duration: 750,
+                            easing: 'easeInOutCubic'
+                        });
+                }
+                
+                currentImageIndex = nextImageIndex;
+                lastFlipTime = currentTime;
             }
             
-            currentImageIndex = nextImageIndex;
-            
-            // Schedule next flip
-            const randomInterval = Math.random() * 4000 + 3000;
-            setTimeout(flipTile, randomInterval);
+            requestAnimationFrame(flipTile);
         }
         
         // Start flipping after initial delay
         const initialDelay = Math.random() * 3000 + 1000;
-        setTimeout(flipTile, initialDelay);
+        setTimeout(() => {
+            lastFlipTime = performance.now();
+            requestAnimationFrame(flipTile);
+        }, initialDelay);
     }
     
     function getFlipDirection(transition) {
