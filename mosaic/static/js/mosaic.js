@@ -4,18 +4,37 @@ document.addEventListener('DOMContentLoaded', function() {
     tiles.forEach(tile => {
         const images = tile.querySelectorAll('img');
         const transition = tile.dataset.transition || 'fade';
+        const interval = tile.dataset.interval || '5s';
         
         if (images.length > 1) {
             // Special handling for flip transitions - flip the entire tile
             if (transition.startsWith('flip')) {
-                setupFlipTransition(tile, images, transition);
+                setupFlipTransition(tile, images, transition, interval);
             } else {
-                setupImageTransition(tile, images, transition);
+                setupImageTransition(tile, images, transition, interval);
             }
         }
     });
     
-    function setupImageTransition(tile, images, transition) {
+    function parseInterval(intervalString) {
+        if (intervalString.startsWith('random:')) {
+            // Parse random intervals like 'random:3-7'
+            const range = intervalString.replace('random:', '').split('-');
+            const min = parseFloat(range[0]) * 1000;
+            const max = parseFloat(range[1]) * 1000;
+            return Math.random() * (max - min) + min;
+        } else if (intervalString.endsWith('m')) {
+            // Parse minutes like '1m'
+            return parseFloat(intervalString.replace('m', '')) * 60 * 1000;
+        } else if (intervalString.endsWith('s')) {
+            // Parse seconds like '5s'
+            return parseFloat(intervalString.replace('s', '')) * 1000;
+        }
+        // Default fallback
+        return 5000;
+    }
+
+    function setupImageTransition(tile, images, transition, interval) {
         // Hide all images except the first
         images.forEach((img, index) => {
             if (index === 0) {
@@ -29,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let currentImageIndex = 0;
         let lastTransitionTime = 0;
-        const transitionInterval = Math.random() * 4000 + 3000; // Random interval between 3-7 seconds
+        let transitionInterval = parseInterval(interval);
         
         function switchImage(currentTime) {
             if (currentTime - lastTransitionTime >= transitionInterval) {
@@ -49,20 +68,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 currentImageIndex = nextImageIndex;
                 lastTransitionTime = currentTime;
+                
+                // For random intervals, generate a new interval each time
+                if (interval.startsWith('random:')) {
+                    transitionInterval = parseInterval(interval);
+                }
             }
             
             requestAnimationFrame(switchImage);
         }
-        
-        // Start the transitions after initial delay
-        const initialDelay = Math.random() * 3000 + 1000;
+         // Start the transitions after initial delay
+        const initialDelay = Math.random() * 2000 + 500; // Random delay 0.5-2.5s
         setTimeout(() => {
             lastTransitionTime = performance.now();
             requestAnimationFrame(switchImage);
         }, initialDelay);
     }
-    
-    function setupFlipTransition(tile, images, transition) {
+
+    function setupFlipTransition(tile, images, transition, interval) {
         // Show only the first image initially
         images.forEach((img, index) => {
             if (index === 0) {
@@ -74,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let currentImageIndex = 0;
         let lastFlipTime = 0;
-        const flipInterval = Math.random() * 4000 + 3000; // Random interval between 3-7 seconds
+        let flipInterval = parseInterval(interval);
         
         function flipTile(currentTime) {
             if (currentTime - lastFlipTime >= flipInterval) {
@@ -130,13 +153,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 currentImageIndex = nextImageIndex;
                 lastFlipTime = currentTime;
+                
+                // For random intervals, generate a new interval each time
+                if (interval.startsWith('random:')) {
+                    flipInterval = parseInterval(interval);
+                }
             }
             
             requestAnimationFrame(flipTile);
         }
         
         // Start flipping after initial delay
-        const initialDelay = Math.random() * 3000 + 1000;
+        const initialDelay = Math.random() * 2000 + 500; // Random delay 0.5-2.5s
         setTimeout(() => {
             lastFlipTime = performance.now();
             requestAnimationFrame(flipTile);
