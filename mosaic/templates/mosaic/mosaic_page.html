@@ -2,18 +2,19 @@
 
 {% load static wagtailcore_tags %}
 
+{% block body_class %}template-portfolio{% endblock %}
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/mosaic.css' %}">
 {% endblock %}
 
-{% block body_class %}template-portfolio{% endblock %}
-
 {% block content %}
-    <div class="mosaic">
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4 p-4">
         {{ page.tiles }}
     </div>
 {% endblock %}
 
 {% block extra_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="{% static 'js/mosaic.js' %}"></script>
 {% endblock %}

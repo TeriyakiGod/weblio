@@ -1,7 +1,7 @@
 {% load wagtailimages_tags %}
 
-<div class="tile-block">
+<div class="tile-block relative w-[400px] h-[400px] overflow-hidden group card shadow-xl hover:shadow-2xl transition-shadow duration-300" data-transition="{{ value.transition }}">
     {% for img in value.images %}
-        {% image img fill-400x400 loading="lazy" %}
+        {% image img fill-400x400 loading="lazy" class="mosaic-image absolute top-0 left-0 w-full h-full object-cover group-hover:scale-105" %}
     {% endfor %}
 </div>
