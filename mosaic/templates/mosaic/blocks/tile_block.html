@@ -1,7 +1,38 @@
 {% load wagtailimages_tags %}
 
-<div class="tile-block relative w-[400px] h-[400px] overflow-hidden group card shadow-xl hover:shadow-2xl transition-shadow duration-300" data-transition="{{ value.transition }}">
-    {% for img in value.images %}
-        {% image img fill-400x400 loading="lazy" class="mosaic-image absolute top-0 left-0 w-full h-full object-cover group-hover:scale-105" %}
-    {% endfor %}
-</div>
+{% if value.link %}
+<a href="{{ value.link }}" class="block">
+{% endif %}
+    <div class="tile-block relative w-full aspect-square overflow-hidden group shadow-xl hover:shadow-2xl transition-shadow duration-300" data-transition="{{ value.transition }}">
+        <div class="absolute inset-0 group-hover:scale-105 transition-transform duration-300">
+            {% for img in value.images %}
+                {% image img fill-400x400 loading="lazy" class="mosaic-image absolute top-0 left-0 w-full h-full object-cover" %}
+            {% endfor %}
+        </div>
+        
+        {% if value.title or value.description %}
+            <!-- Dark overlay -->
+            {% if value.text_on_hover %}
+                <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300 pointer-events-none z-10"></div>
+            {% else %}
+                <div class="absolute inset-0 bg-black opacity-50 transition-opacity duration-300 pointer-events-none z-10"></div>
+            {% endif %}
+            
+            <!-- Text content -->
+            {% if value.text_on_hover %}
+                <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+            {% else %}
+                <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-4 opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+            {% endif %}
+                {% if value.title %}
+                    <h3 class="text-lg font-semibold text-center mb-2">{{ value.title }}</h3>
+                {% endif %}
+                {% if value.description %}
+                    <p class="text-sm text-center leading-relaxed">{{ value.description }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+{% if value.link %}
+</a>
+{% endif %}

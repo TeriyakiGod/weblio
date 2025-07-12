@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .add({
                             targets: nextImage,
-                            translateX: ['100%', '0%'],
+                            translateX: '0%',
                             duration: duration,
                             easing: 'easeInOutCubic',
                             complete: resolve
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .add({
                             targets: nextImage,
-                            translateX: ['-100%', '0%'],
+                            translateX: '0%',
                             duration: duration,
                             easing: 'easeInOutCubic',
                             complete: resolve
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .add({
                             targets: nextImage,
-                            translateY: ['100%', '0%'],
+                            translateY: '0%',
                             duration: duration,
                             easing: 'easeInOutCubic',
                             complete: resolve
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         })
                         .add({
                             targets: nextImage,
-                            translateY: ['-100%', '0%'],
+                            translateY: '0%',
                             duration: duration,
                             easing: 'easeInOutCubic',
                             complete: resolve
