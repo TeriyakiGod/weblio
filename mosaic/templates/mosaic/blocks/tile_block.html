@@ -1,9 +1,9 @@
 {% load wagtailimages_tags %}
 
 {% if value.link %}
-<a href="{{ value.link }}" class="block">
+<a href="{{ value.link }}" class="block h-full">
 {% endif %}
-    <div class="tile-block relative w-full aspect-square overflow-hidden group shadow-xl hover:shadow-2xl transition-shadow duration-300" data-transition="{{ value.transition }}" data-interval="{{ value.image_change_interval }}">
+    <div class="tile-block relative w-full h-full overflow-hidden group shadow-xl hover:shadow-2xl transition-shadow duration-300" data-transition="{{ value.transition }}" data-interval="{{ value.image_change_interval }}">
         <div class="absolute inset-0 group-hover:scale-105 transition-transform duration-300">
             {% for img in value.images %}
                 {% image img fill-400x400 loading="lazy" class="mosaic-image absolute top-0 left-0 w-full h-full object-cover" %}

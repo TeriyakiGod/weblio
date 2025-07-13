@@ -9,12 +9,37 @@
 {% endblock %}
 
 {% block content %}
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100vw),1fr))]">
-        {{ page.tiles }}
-    </div>
+    {% if page.layout == 'content-left' %}
+        <div class="flex h-screen">
+            <div class="w-1/2 overflow-auto p-8">
+                <div class="prose max-w-none">
+                    {{ page.content_page }}
+                </div>
+            </div>
+            <div class="w-1/2 overflow-hidden">
+                <div class="mosaic-grid h-full w-full">
+                    {{ page.tiles }}
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="flex h-screen">
+            <div class="w-1/2 overflow-hidden">
+                <div class="mosaic-grid h-full w-full">
+                    {{ page.tiles }}
+                </div>
+            </div>
+            <div class="w-1/2 overflow-auto p-8">
+                <div class="prose max-w-none">
+                    {{ page.content|richtext }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block extra_js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="{% static 'js/mosaic.js' %}"></script>
+    <script src="{% static 'js/mosaic-grid.js' %}"></script>
 {% endblock %}
