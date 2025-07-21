@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "home",
     "portfolio",
     "mosaic",
+    "landing",
     "search",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",

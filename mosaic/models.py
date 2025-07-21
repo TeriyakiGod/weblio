@@ -34,3 +34,17 @@ class MosaicPage(Page):
         FieldPanel("layout"),
         FieldPanel("tiles"),
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        
+        # Add the selected content page to the context
+        if self.content_page:
+            selected_page = self.content_page.specific
+            context['selected_page'] = selected_page
+            context['selected_page_template'] = selected_page.get_template(request)
+        else:
+            context['selected_page'] = None
+            context['selected_page_template'] = None
+            
+        return context
